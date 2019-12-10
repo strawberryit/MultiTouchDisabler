@@ -1,6 +1,7 @@
 package pe.andy.multitouchdisabler;
 
 import android.app.Activity;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -26,13 +27,21 @@ public class Application implements IXposedHookLoadPackage {
 					"dispatchTouchEvent",
 					MotionEvent.class,
 					ignoreMultitouch);
-			
-			XposedHelpers.findAndHookMethod(
-					"com.ridi.books.viewer.reader.activity.b",
-					lpparam.classLoader,
-					"dispatchTouchEvent",
-					MotionEvent.class,
-					ignoreMultitouch);
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		try {
+			final String packageName = "com.ridi.paper";
+			if (TextUtils.equals(lpparam.packageName, packageName)) {
+				XposedHelpers.findAndHookMethod(
+						"com.ridi.books.viewer.reader.activity.b",
+						lpparam.classLoader,
+						"dispatchTouchEvent",
+						MotionEvent.class,
+						ignoreMultitouch);
+			}
 		}
 		catch (Exception e) {
 			e.printStackTrace();
