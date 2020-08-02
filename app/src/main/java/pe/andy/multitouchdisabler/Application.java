@@ -73,7 +73,7 @@ public class Application implements IXposedHookLoadPackage {
         protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
             try {
                 MotionEvent ev = (MotionEvent) param.args[0];
-                if (ev.getPointerCount() > 1) {
+                if (((int) ev.getY()) == 910 || ev.getPointerCount() > 1) {
                     param.setResult(false);
                     return;
                 }
