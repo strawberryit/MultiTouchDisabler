@@ -47,14 +47,14 @@ public class Application implements IXposedHookLoadPackage {
             final String packageName = "com.ridi.paper";
             if (TextUtils.equals(lpparam.packageName, packageName)) {
                 findAndHookMethod(
-                        "com.ridi.books.viewer.reader.activity.b",
+                        "com.ridi.books.viewer.reader.activity.ReaderActivity",
                         lpparam.classLoader,
                         "dispatchTouchEvent",
                         MotionEvent.class,
                         ignoreMultitouch);
 
                 findAndHookMethod(
-                        "com.ridi.books.viewer.reader.activity.b",
+                        "com.ridi.books.viewer.reader.activity.ReaderActivity",
                         lpparam.classLoader,
                         "dispatchKeyEvent",
                         KeyEvent.class,
