@@ -7,15 +7,30 @@ import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 
+import de.robv.android.xposed.IXposedHookInitPackageResources;
 import de.robv.android.xposed.IXposedHookLoadPackage;
+import de.robv.android.xposed.IXposedHookZygoteInit;
 import de.robv.android.xposed.XC_MethodHook;
+import de.robv.android.xposed.callbacks.XC_InitPackageResources.InitPackageResourcesParam;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
 
 import static android.view.KeyEvent.KEYCODE_PAGE_DOWN;
 import static android.view.KeyEvent.KEYCODE_PAGE_UP;
 import static de.robv.android.xposed.XposedHelpers.findAndHookMethod;
 
-public class Application implements IXposedHookLoadPackage {
+public class Application implements IXposedHookLoadPackage, IXposedHookZygoteInit, IXposedHookInitPackageResources {
+
+    public static String MODULE_PATH;
+
+    @Override
+    public void initZygote(StartupParam startupParam) {
+        MODULE_PATH = startupParam.modulePath;
+    }
+
+    @Override
+    public void handleInitPackageResources(InitPackageResourcesParam resparam) {
+        PaperLauncherButton.INSTANCE.modRes(resparam);
+    }
 
     @Override
     public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) {
@@ -60,6 +75,13 @@ public class Application implements IXposedHookLoadPackage {
                         KeyEvent.class,
                         ignoreKeyRepeat);
             }
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        try {
+            PaperLauncherButton.INSTANCE.modCode(lpparam);
         }
         catch (Exception e) {
             e.printStackTrace();
